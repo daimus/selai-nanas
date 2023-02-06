@@ -1,4 +1,4 @@
-package com.example.productservice.infrastructure.data.jpa.product;
+package com.example.productservice.infrastructure.data.jpa.productCategory;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,16 +11,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "products")
-public class ProductEntity {
+@Table(name = "products_categories")
+public class ProductCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Integer price;
-    private Integer stock;
-    private String description;
-    private String images;
     private Date created_at;
     private Date updated_at;
     private Date deleted_at;

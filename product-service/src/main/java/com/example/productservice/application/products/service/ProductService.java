@@ -23,8 +23,8 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Product saveProduct(@Valid Product user) {
-        return productRepository.save(user);
+    public Product saveProduct(@Valid Product product) {
+        return productRepository.save(product);
     }
 
     @Override
