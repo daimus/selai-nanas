@@ -6,7 +6,7 @@ import java.util.List;
 public interface OrderUseCase {
     List<Order> getOrder();
     Order getOrderById(Long id);
-    Order saveOrder(Order order);
-    Order saveOrder(Long id, Order order);
+    Order saveOrder(Order Order);
+    Order saveOrder(Long id, Order Order);
     boolean deleteOrderById(Long id);
 }
