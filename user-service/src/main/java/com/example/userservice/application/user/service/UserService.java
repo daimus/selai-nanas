@@ -23,6 +23,12 @@ public class UserService implements UserUseCase {
     public User getUserById(Long id) {
         return userRepository.findById(id);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
     @Override
     public User saveUser(@Valid User user) {
         user.setPassword(this.hashPassword(user.getPassword()));

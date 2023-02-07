@@ -39,6 +39,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User findUserByUsername(String username) {
+        Optional<UserEntity> userEntity = jpaUserRepository.findByUsername(username);
+        if (userEntity.isEmpty()){
+            throw new NoSuchElementException();
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userEntity.get(), user);
+        return user;
+    }
+
+    @Override
     public User save(User user) {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);

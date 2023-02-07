@@ -7,6 +7,7 @@ import java.util.List;
 public interface UserUseCase {
     List<User> getUsers();
     User getUserById(Long id);
+    User getUserByUsername(String username);
     User saveUser(User user);
     User saveUser(Long id, User user);
     boolean deleteUserById(Long id);

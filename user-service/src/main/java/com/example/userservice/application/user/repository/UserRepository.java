@@ -7,6 +7,7 @@ import java.util.List;
 public interface UserRepository {
     List<User> findAll();
     User findById(Long id);
+    User findUserByUsername(String username);
     User save(User user);
     boolean deleteById(Long id);
 }
