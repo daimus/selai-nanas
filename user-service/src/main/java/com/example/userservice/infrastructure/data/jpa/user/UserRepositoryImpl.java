@@ -4,6 +4,9 @@ import com.example.userservice.application.user.entity.User;
 import com.example.userservice.application.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final JpaUserRepository jpaUserRepository;
     @Override
     public List<User> findAll() {
-        List<UserEntity> userEntities = (List<UserEntity>) jpaUserRepository.findAll();
+        List<UserEntity> userEntities = jpaUserRepository.findAll();
         List<User> users = new ArrayList<>();
         for (UserEntity userEntity: userEntities){
             User user = new User();
@@ -25,6 +28,18 @@ public class UserRepositoryImpl implements UserRepository {
             users.add(user);
         }
         return users;
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        Page<UserEntity> userEntities = jpaUserRepository.findAll(pageable);
+        List<User> users = new ArrayList<>();
+        for (UserEntity userEntity: userEntities.getContent()){
+            User user = new User();
+            BeanUtils.copyProperties(userEntity, user);
+            users.add(user);
+        }
+        return new PageImpl<>(users, pageable, userEntities.getTotalElements());
     }
 
     @Override

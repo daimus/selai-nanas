@@ -6,6 +6,9 @@ import com.example.userservice.application.user.usecase.UserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,13 @@ public class UserService implements UserUseCase {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    @Override
+    public Page<User> getUsers(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
+    }
+
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id);
