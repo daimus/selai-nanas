@@ -20,11 +20,20 @@ public class OrderEntity {
     private Integer idProduct;
     private Integer idUser;
 
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    private Order_Status status;
     private Integer total;
     @CreatedDate
     private Date created_at;
     @LastModifiedDate
     private Date updated_at;
     private Date deleted_at;
+
+    public enum Order_Status {
+        UNPAID,
+        PAID,
+        CANCEL,
+        DONE,
+    }
+
 }
