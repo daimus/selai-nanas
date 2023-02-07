@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
@@ -30,6 +31,20 @@ public class Response {
     public void setData(Object data) {
         this.data = data;
     }
+    public void setPageData(Page data){
+        if (data.getNumberOfElements() > 0){
+            this.data = data.getContent();
+        }
+
+        Map<String, Object> page = new HashMap<String, Object>();
+        page.put("number_element", data.getNumberOfElements());
+        page.put("total_pages", data.getTotalPages());
+        page.put("total_elements", data.getTotalElements());
+        page.put("last", data.isLast());
+        page.put("size", data.getSize());
+        page.put("page", data.getNumber());
+        this.page = page;
+    }
     public void setError(Exception e){
         this.error = e.getClass().getSimpleName();
         this.message = e.getMessage();
@@ -44,6 +59,9 @@ public class Response {
             if (this.httpCode == 200 && this.errors == null){
                 this.httpCode = 404;
             }
+        }
+        if (this.page != null){
+            response.put("page", this.page);
         }
         // Meta Handler
         Map<String, Object> meta = new HashMap<String, Object>();
