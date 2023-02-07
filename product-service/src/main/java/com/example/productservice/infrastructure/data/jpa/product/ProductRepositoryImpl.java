@@ -19,13 +19,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<Product> findAll() {
         List<ProductEntity> productEntities = (List<ProductEntity>) jpaProductRepository.findAll();
-        List<Product> users = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         for (ProductEntity productEntity: productEntities){
             Product product = new Product();
             BeanUtils.copyProperties(productEntity, product);
-            users.add(product);
+            products.add(product);
         }
-        return users;
+        return products;
     }
 
     @Override
