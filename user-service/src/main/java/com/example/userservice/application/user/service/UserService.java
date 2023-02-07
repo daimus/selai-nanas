@@ -5,6 +5,7 @@ import com.example.userservice.application.user.repository.UserRepository;
 import com.example.userservice.application.user.usecase.UserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,8 +47,13 @@ public class UserService implements UserUseCase {
     }
     @Override
     public User saveUser(Long id, @Valid User user) {
+        User prevUser = this.getUserById(id);
         user.setId(id);
-        user.setPassword(this.hashPassword(user.getPassword()));
+        if (user.getPassword() == null){
+            user.setPassword(prevUser.getPassword());
+        } else {
+            user.setPassword(this.hashPassword(user.getPassword()));
+        }
         return userRepository.save(user);
     }
     @Override
