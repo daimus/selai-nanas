@@ -7,8 +7,12 @@ import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -28,6 +32,9 @@ public class Response {
         this.data = dataParam;
     }
 
+    public void setMessage(String message){
+        this.message = message;
+    }
     public void setData(Object data) {
         this.data = data;
     }
@@ -47,7 +54,23 @@ public class Response {
     }
     public void setError(Exception e){
         this.error = e.getClass().getSimpleName();
-        this.message = e.getMessage();
+        if (this.message != null){
+            this.message = e.getLocalizedMessage();
+        }
+    }
+
+    public void setErrors(MethodArgumentNotValidException methodArgumentNotValidException){
+        List<FieldError> fieldErrors = methodArgumentNotValidException.getFieldErrors();
+        Map<String, Object> errors = new HashMap<String, Object>();
+        for (FieldError fieldError: fieldErrors) {
+            List<String> error = (List<String>) errors.get(fieldError.getField());
+            if (error == null){
+                error = new ArrayList<>();
+            }
+            error.add(fieldError.getDefaultMessage());
+            errors.put(fieldError.getField(), error);
+        }
+        this.errors = errors;
     }
 
     public ResponseEntity<Object> getResponse(){
@@ -67,6 +90,7 @@ public class Response {
         Map<String, Object> meta = new HashMap<String, Object>();
         if (this.errors != null){
             meta.put("errors", this.errors);
+            this.errors = null;
             if (this.httpCode < 400){
                 this.httpCode = 500;
             }
