@@ -1,5 +1,7 @@
 package com.example.userservice.infrastructure.presenter.rest.authentication;
 
+import com.example.userservice.application.user.entity.User;
+import com.example.userservice.application.user.usecase.UserUseCase;
 import com.example.userservice.infrastructure.presenter.rest.Response;
 import com.example.userservice.infrastructure.presenter.rest.authentication.dto.AuthenticationRequest;
 import com.example.userservice.infrastructure.presenter.rest.authentication.dto.AuthenticationResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
+    private final UserUseCase userUseCase;
     @Autowired
     JwtUtil jwtUtil;
     @PostMapping
@@ -30,7 +33,8 @@ public class AuthenticationController {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
         );
-        String token = jwtUtil.generateToken(authenticationRequest.getUsername());
+        User user = userUseCase.getUserByUsername(authenticationRequest.getUsername());
+        String token = jwtUtil.generateToken(user);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
         response.setData(authenticationResponse);
         return response.getResponse();

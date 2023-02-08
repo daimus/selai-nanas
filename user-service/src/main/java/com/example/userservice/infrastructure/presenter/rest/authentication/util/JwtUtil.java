@@ -1,5 +1,6 @@
 package com.example.userservice.infrastructure.presenter.rest.authentication.util;
 
+import com.example.userservice.application.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,12 +18,21 @@ public class JwtUtil {
     @Value("${spring.jwt.token}")
     private String SECRET_KEY;
 
-    public String extractUsername(String token) {
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+    public String extractUsername(String token) {
+        final Claims claims = extractAllClaims(token);
+        return claims.get("username", String.class);
     }
 
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String extractRole(String token){
+        final Claims claims = extractAllClaims(token);
+        return claims.get("role", String.class);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -38,9 +48,11 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole());
+        return createToken(claims, user.getId().toString());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -52,5 +64,10 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public Boolean validateToken(String token, Long id) {
+        final String userId = extractUserId(token);
+        return (userId.equals(id.toString()) && !isTokenExpired(token));
     }
 }
