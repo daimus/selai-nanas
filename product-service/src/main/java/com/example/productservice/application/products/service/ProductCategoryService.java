@@ -5,6 +5,9 @@ import com.example.productservice.application.products.repository.ProductCategor
 import com.example.productservice.application.products.usecase.ProductCategoryUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,12 @@ public class ProductCategoryService implements ProductCategoryUseCase {
     @Override
     public List<ProductCategory> getProductCategory() {
         return productCategoryRepository.findAll();
+    }
+
+    @Override
+    public Page<ProductCategory> getProductCategory(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productCategoryRepository.findAll(pageable);
     }
 
     @Override
