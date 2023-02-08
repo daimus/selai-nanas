@@ -4,19 +4,29 @@ import com.example.productservice.application.products.usecase.ProductUseCase;
 import com.example.productservice.application.products.entity.Product;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 
 public class ProductService implements ProductUseCase {
     private final ProductRepository productRepository;
+
     @Override
     public List<Product> getProduct() {
         return productRepository.findAll();
     }
 
+    @Override
+    public Page<Product> getProduct(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAll(pageable);
+    }
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id);
