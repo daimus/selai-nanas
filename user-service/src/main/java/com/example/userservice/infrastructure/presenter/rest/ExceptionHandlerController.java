@@ -1,5 +1,6 @@
 package com.example.userservice.infrastructure.presenter.rest;
 
+import com.example.userservice.infrastructure.presenter.rest.exception.ResourceForbiddenException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,14 @@ public class ExceptionHandlerController {
         this.response.setHttpCode(400);
         this.response.setMessage("Invalid input");
         this.response.setErrors(methodArgumentNotValidException);
+        return this.response.getResponse();
+    }
+
+    @ExceptionHandler(ResourceForbiddenException.class)
+    public ResponseEntity<Object> handleResourceForbiddenException(ResourceForbiddenException resourceForbiddenException, HttpServletRequest request){
+        this.response.setError(resourceForbiddenException);
+        this.response.setHttpCode(403);
+        this.response.setMessage("Forbidden");
         return this.response.getResponse();
     }
 

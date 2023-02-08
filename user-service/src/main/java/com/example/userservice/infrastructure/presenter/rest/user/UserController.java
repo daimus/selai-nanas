@@ -3,11 +3,16 @@ package com.example.userservice.infrastructure.presenter.rest.user;
 import com.example.userservice.application.user.entity.User;
 import com.example.userservice.application.user.usecase.UserUseCase;
 import com.example.userservice.infrastructure.presenter.rest.Response;
+import com.example.userservice.infrastructure.presenter.rest.authentication.dto.AuthenticatedUser;
+import com.example.userservice.infrastructure.presenter.rest.exception.ResourceForbiddenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,8 +30,14 @@ public class UserController {
         return response.getResponse();
     }
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Object> getUser(@PathVariable Long id){
+    public ResponseEntity<Object> getUser(@PathVariable Long id) throws Exception {
         log.info("GET /users/{} called", id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_customer")) && id != authenticatedUser.getUserId()){
+            throw new ResourceForbiddenException();
+        }
+
         Response response = new Response();
         User user = userUseCase.getUserById(id);
         response.setData(user);
@@ -42,8 +53,14 @@ public class UserController {
         return response.getResponse();
     }
     @PatchMapping(path = "/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user) throws Exception {
         log.info("PATCH /users/{} called with body: {}", id, user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_customer")) && id != authenticatedUser.getUserId()){
+            throw new ResourceForbiddenException();
+        }
+
         Response response = new Response();
         user = userUseCase.saveUser(id, user);
         response.setData(user);
