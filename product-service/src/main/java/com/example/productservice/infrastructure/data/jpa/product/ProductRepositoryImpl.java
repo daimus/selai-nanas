@@ -4,6 +4,8 @@ import com.example.productservice.application.products.entity.Product;
 import com.example.productservice.application.products.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final JpaProductRepository jpaProductRepository;
 
     @Override
+    @Cacheable(value = "ProductCache")
     public Page<Product> findAll(Pageable pageable) {
         Page<ProductEntity> productEntities = jpaProductRepository.findAll(pageable);
         List<Product> products = new ArrayList<>();
@@ -32,6 +35,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    @Cacheable(value = "ProductCache")
     public List<Product> findAll() {
         List<ProductEntity> productEntities = (List<ProductEntity>) jpaProductRepository.findAll();
         List<Product> products = new ArrayList<>();
@@ -45,6 +49,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 
     @Override
+    @Cacheable(key = "#id" ,value = "ProductCache")
     public Product findById(Long id) {
         Optional<ProductEntity> productEntities = jpaProductRepository.findById(id);
         if (productEntities.isEmpty()){
@@ -56,6 +61,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    @CacheEvict(cacheNames = "ProductCache", allEntries = true)
     public Product save(Product product) {
         ProductEntity productEntities = new ProductEntity();
         BeanUtils.copyProperties(product, productEntities);
@@ -65,6 +71,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    @CacheEvict(cacheNames = "ProductCache", allEntries = true)
     public boolean deleteById(Long id) {
         jpaProductRepository.deleteById(id);
         return true;
