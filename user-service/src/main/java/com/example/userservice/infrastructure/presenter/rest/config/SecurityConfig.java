@@ -1,9 +1,11 @@
 package com.example.userservice.infrastructure.presenter.rest.config;
 
+import com.example.userservice.infrastructure.presenter.rest.authentication.filter.IpMatcher;
 import com.example.userservice.infrastructure.presenter.rest.authentication.filter.JwtAuthFilter;
 import com.example.userservice.infrastructure.presenter.rest.authentication.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +29,8 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailService customUserDetailService;
     private final JwtAuthFilter jwtAuthFilter;
+    @Value("${service.ip}")
+    private String SERVICE_IP;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -35,6 +39,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers(new IpMatcher(SERVICE_IP)).permitAll()
                         .requestMatchers(HttpMethod.POST ,"/users").anonymous()
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("admin")
@@ -49,6 +54,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
