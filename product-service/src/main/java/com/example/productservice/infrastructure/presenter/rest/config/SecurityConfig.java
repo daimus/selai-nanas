@@ -1,10 +1,8 @@
-package com.example.userservice.infrastructure.presenter.rest.config;
+package com.example.productservice.infrastructure.presenter.rest.config;
 
-import com.example.userservice.infrastructure.presenter.rest.authentication.filter.IpMatcher;
-import com.example.userservice.infrastructure.presenter.rest.authentication.filter.JwtAuthFilter;
-import com.example.userservice.infrastructure.presenter.rest.authentication.service.CustomUserDetailService;
+import com.example.productservice.infrastructure.presenter.rest.authentication.filter.IpMatcher;
+import com.example.productservice.infrastructure.presenter.rest.authentication.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +12,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -26,8 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
     private final JwtAuthFilter jwtAuthFilter;
     @Value("${service.ip}")
     private String SERVICE_IP;
@@ -38,16 +34,17 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/login").permitAll()
                         .requestMatchers(new IpMatcher(SERVICE_IP)).permitAll()
-                        .requestMatchers(HttpMethod.POST ,"/users").anonymous()
-                        .requestMatchers(HttpMethod.GET, "/users").hasRole("admin")
-                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("admin")
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/products").hasRole("admin")
+                        .requestMatchers(HttpMethod.PATCH, "/products").hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE, "/products").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/category").hasRole("admin")
+                        .requestMatchers(HttpMethod.PATCH, "/category").hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE, "/category").hasRole("admin")
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(customUserDetailService)
                 .build();
     }
     @Bean

@@ -1,14 +1,15 @@
-package com.example.userservice.infrastructure.presenter.rest.authentication.filter;
+package com.example.productservice.infrastructure.presenter.rest.authentication.filter;
 
-import com.example.userservice.infrastructure.presenter.rest.authentication.dto.AuthenticatedUser;
-import com.example.userservice.infrastructure.presenter.rest.authentication.service.CustomUserDetailService;
-import com.example.userservice.infrastructure.presenter.rest.authentication.util.JwtUtil;
+import com.example.productservice.infrastructure.presenter.rest.authentication.dto.AuthenticatedUser;
+import com.example.productservice.infrastructure.presenter.rest.authentication.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,11 +17,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final CustomUserDetailService customUserDetailService;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -41,7 +43,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = new AuthenticatedUser(userName, "", customUserDetailService.getAuthorities(userRole), userId);
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole));
+            UserDetails userDetails = new AuthenticatedUser(userName, "", authorities, userId);
             if (jwtUtil.validateToken(token, userId)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
