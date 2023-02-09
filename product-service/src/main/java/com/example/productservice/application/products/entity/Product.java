@@ -2,7 +2,9 @@ package com.example.productservice.application.products.entity;
 
 import com.example.productservice.infrastructure.data.jpa.productCategory.ProductCategoryEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +21,11 @@ public class Product {
     private Long id;
     @NotEmpty(message = "Product name is required")
     private String name;
-    @NotEmpty(message = "Price is required")
+    @NotNull
+    @Min(value = 1000)
     private Integer price;
-    @NotEmpty(message = "Stock is required")
+    @NotNull
+    @Min(value = 1)
     private Integer stock;
     private String description;
     @NotEmpty(message = "Product image is required")
