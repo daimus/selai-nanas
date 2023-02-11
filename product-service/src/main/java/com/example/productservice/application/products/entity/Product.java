@@ -30,11 +30,8 @@ public class Product {
     private String description;
     @NotEmpty(message = "Product image is required")
     private String images;
+    private Long category_id;
     private Date created_at;
     private Date updated_at;
     private Date deleted_at;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private ProductCategoryEntity category;
 }

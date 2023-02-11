@@ -23,8 +23,7 @@ public class ProductCategoryService implements ProductCategoryUseCase {
     }
 
     @Override
-    public Page<ProductCategory> getProductCategory(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<ProductCategory> getProductCategory(Pageable pageable) {
         return productCategoryRepository.findAll(pageable);
     }
 

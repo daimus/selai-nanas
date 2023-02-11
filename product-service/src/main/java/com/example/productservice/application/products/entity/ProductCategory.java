@@ -21,7 +21,6 @@ public class ProductCategory {
     private Date updated_at;
     private Date deleted_at;
 
-    @ManyToOne
-    private ProductCategoryEntity category;
+
 
 }
