@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +25,25 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Page<Product> getProduct(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Product> getProduct(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
+
+    @Override
+    public Page<Product> getProduct(Pageable pageable, String search, Long categoryId) {
+        return productRepository.findAll(pageable, search, categoryId);
+    }
+
+    @Override
+    public Page<Product> getProduct(Pageable pageable, String search) {
+        return productRepository.findAll(pageable, search);
+    }
+
+    @Override
+    public Page<Product> getProduct(Pageable pageable, Long categoryId) {
+        return productRepository.findAll(pageable, categoryId);
+    }
+
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id);

@@ -2,10 +2,15 @@ package com.example.productservice.infrastructure.presenter.rest.product;
 
 import com.example.productservice.application.products.entity.Product;
 import com.example.productservice.application.products.service.ProductService;
+import com.example.productservice.application.products.usecase.ProductUseCase;
 import com.example.productservice.infrastructure.presenter.rest.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +21,47 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
-    private final ProductService productService;
+    private final ProductUseCase productUseCase;
     @GetMapping
-    public ResponseEntity<Object> getProduct(){
+    public ResponseEntity<Object> getProduct(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Long categoryId
+    ){
         log.info("GET /product/{id} called");
         Response response = new Response();
-        List<Product> product = productService.getProduct();
-        response.setData(product);
+        Pageable pageable;
+        if (sort == null){
+            pageable = PageRequest.of(page, size);
+        } else {
+            String[] sortCriteria = sort.split(",");
+            pageable = PageRequest.of(page, size, Sort.by(sortCriteria[1] == "asc" ? Sort.Direction.ASC : Sort.Direction.DESC, sortCriteria[0]));
+        }
+
+        Page<Product> products;
+        if (search != null && categoryId != null){
+            System.out.println("search & category");
+            products = productUseCase.getProduct(pageable, search, categoryId);
+        } else if (search != null){
+            System.out.println("search");
+            products = productUseCase.getProduct(pageable, search);
+        } else if (categoryId != null){
+            System.out.println("category");
+            products = productUseCase.getProduct(pageable, categoryId);
+        } else {
+            System.out.println("none");
+            products = productUseCase.getProduct(pageable);
+        }
+        response.setPageData(products);
         return response.getResponse();
     }
     @GetMapping(path = "/{id}")
     public ResponseEntity<Object> getProductById(@PathVariable Long id){
         log.info("GET /product/{id} called");
         Response response = new Response();
-        Product product = productService.getProductById(id);
+        Product product = productUseCase.getProductById(id);
         response.setData(product);
         return response.getResponse();
     }
@@ -37,7 +69,7 @@ public class ProductController {
     public ResponseEntity<Object> createProduct(@Valid @RequestBody Product product){
         log.info("GET /product/{id} called");
         Response response = new Response();
-        product = productService.saveProduct(product);
+        product = productUseCase.saveProduct(product);
         response.setData(product);
         response.setHttpCode(201);
         return response.getResponse();
@@ -46,7 +78,7 @@ public class ProductController {
     public ResponseEntity<Object> updateProduct(@PathVariable Long id, @RequestBody Product product){
         log.info("GET /product/{id} called");
         Response response = new Response();
-        product = productService.saveProduct(id, product);
+        product = productUseCase.saveProduct(id, product);
         response.setData(product);
         return response.getResponse();
     }
@@ -54,7 +86,7 @@ public class ProductController {
     public ResponseEntity<Object> deleteProduct(@PathVariable Long id){
         log.info("GET /product/{id} called");
         Response response = new Response();
-        productService.deleteProductById(id);
+        productUseCase.deleteProductById(id);
         response.setHttpCode(204);
         return response.getResponse();
     }

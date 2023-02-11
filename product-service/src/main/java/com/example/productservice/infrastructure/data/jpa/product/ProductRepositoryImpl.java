@@ -4,17 +4,14 @@ import com.example.productservice.application.products.entity.Product;
 import com.example.productservice.application.products.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,11 +19,32 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final JpaProductRepository jpaProductRepository;
 
     @Override
-    @Cacheable(value = "ProductCache")
     public Page<Product> findAll(Pageable pageable) {
         Page<ProductEntity> productEntities = jpaProductRepository.findAll(pageable);
+        return this.castProductEntity(productEntities, pageable);
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable, String search, Long categoryId) {
+        Page<ProductEntity> productEntities = jpaProductRepository.getProductBySearchQueryAndCategory(search, categoryId, pageable);
+        return this.castProductEntity(productEntities, pageable);
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable, String search) {
+        Page<ProductEntity> productEntities = jpaProductRepository.getProductBySearchQuery(search, pageable);
+        return this.castProductEntity(productEntities, pageable);
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable, Long categoryId) {
+        Page<ProductEntity> productEntities = jpaProductRepository.getProductByCategory(categoryId, pageable);
+        return this.castProductEntity(productEntities, pageable);
+    }
+
+    private Page<Product> castProductEntity(Page<ProductEntity> productEntities, Pageable pageable){
         List<Product> products = new ArrayList<>();
-        for (ProductEntity productEntity: productEntities.getContent()){
+        for (Object productEntity: productEntities.getContent()){
             Product product = new Product();
             BeanUtils.copyProperties(productEntity, product);
             products.add(product);
@@ -34,8 +52,16 @@ public class ProductRepositoryImpl implements ProductRepository {
         return new PageImpl<>(products, pageable, productEntities.getTotalElements());
     }
 
+    private Product castProductEntity(Optional<ProductEntity> productEntity){
+        if (productEntity.isEmpty()){
+            throw new NoSuchElementException();
+        }
+        Product product = new Product();
+        BeanUtils.copyProperties(productEntity.get(), product);
+        return product;
+    }
+
     @Override
-    @Cacheable(value = "ProductCache")
     public List<Product> findAll() {
         List<ProductEntity> productEntities = (List<ProductEntity>) jpaProductRepository.findAll();
         List<Product> products = new ArrayList<>();
@@ -51,17 +77,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     @Cacheable(key = "#id" ,value = "ProductCache")
     public Product findById(Long id) {
-        Optional<ProductEntity> productEntities = jpaProductRepository.findById(id);
-        if (productEntities.isEmpty()){
-            throw new NoSuchElementException();
-        }
-        Product product = new Product();
-        BeanUtils.copyProperties(productEntities.get(), product);
-        return product;
+        Optional<ProductEntity> productEntity = jpaProductRepository.findById(id);
+        return this.castProductEntity(productEntity);
     }
 
     @Override
-    @CacheEvict(cacheNames = "ProductCache", allEntries = true)
+    @CachePut(key = "#id" ,value = "ProductCache")
     public Product save(Product product) {
         ProductEntity productEntities = new ProductEntity();
         BeanUtils.copyProperties(product, productEntities);
@@ -71,7 +92,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    @CacheEvict(cacheNames = "ProductCache", allEntries = true)
+    @CachePut(key = "#id" ,value = "ProductCache")
     public boolean deleteById(Long id) {
         jpaProductRepository.deleteById(id);
         return true;
