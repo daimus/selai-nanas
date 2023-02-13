@@ -75,6 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean deleteById(Long id) {
+        this.findById(id);
         jpaUserRepository.deleteById(id);
         return true;
     }

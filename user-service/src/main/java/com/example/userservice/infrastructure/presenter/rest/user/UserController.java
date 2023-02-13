@@ -26,7 +26,7 @@ public class UserController {
         log.info("GET /users called with param page: {}, size: {}", page, size);
         Response response = new Response();
         Page<User> users = userUseCase.getUsers(page, size);
-        response.setPageData(users);
+        response.setPageData(userUseCase.castToUserSafe(users));
         return response.getResponse();
     }
     @GetMapping(path = "/{id}")
@@ -40,7 +40,7 @@ public class UserController {
 
         Response response = new Response();
         User user = userUseCase.getUserById(id);
-        response.setData(user);
+        response.setData(userUseCase.castToUserSafe(user));
         return response.getResponse();
     }
     @PostMapping
@@ -48,7 +48,7 @@ public class UserController {
         log.info("POST /users called with body: {}", user);
         Response response = new Response();
         user = userUseCase.saveUser(user);
-        response.setData(user);
+        response.setData(userUseCase.castToUserSafe(user));
         response.setHttpCode(201);
         return response.getResponse();
     }
@@ -63,7 +63,7 @@ public class UserController {
 
         Response response = new Response();
         user = userUseCase.saveUser(id, user);
-        response.setData(user);
+        response.setData(userUseCase.castToUserSafe(user));
         return response.getResponse();
     }
     @DeleteMapping(path = "/{id}")
