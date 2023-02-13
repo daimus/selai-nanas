@@ -1,7 +1,7 @@
-package com.example.productservice.infrastructure.presenter.rest.productCategory;
+package com.example.productservice.infrastructure.presenter.rest.category;
 
-import com.example.productservice.application.products.entity.ProductCategory;
-import com.example.productservice.application.products.service.ProductCategoryService;
+import com.example.productservice.application.categories.entity.ProductCategory;
+import com.example.productservice.application.categories.service.ProductCategoryService;
 import com.example.productservice.infrastructure.presenter.rest.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/products/categories")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductCategoryController {
     private final ProductCategoryService productCategoryService;
     @GetMapping
     public ResponseEntity<Object> getProductCategory(){
-        log.info("GET /category/{id} called");
+        log.info("GET /products/categories called");
         Response response = new Response();
         List<ProductCategory> productCategory = productCategoryService.getProductCategory();
         response.setData(productCategory);
@@ -27,7 +27,7 @@ public class ProductCategoryController {
     }
     @GetMapping(path = "/{id}")
     public ResponseEntity<Object> getProductCategoryById(@PathVariable Long id){
-        log.info("GET /category/{id} called");
+        log.info("GET /products/categories/{} called", id);
         Response response = new Response();
         ProductCategory productCategory = productCategoryService.getProductCategoryById(id);
         response.setData(productCategory);
@@ -35,7 +35,7 @@ public class ProductCategoryController {
     }
     @PostMapping
     public ResponseEntity<Object> saveProductCategory(@Valid @RequestBody ProductCategory productCategory){
-        log.info("GET /category/{id} called");
+        log.info("POST /products/categories called with body: ", productCategory);
         Response response = new Response();
         productCategory = productCategoryService.saveProductCategory(productCategory);
         response.setData(productCategory);
@@ -44,7 +44,7 @@ public class ProductCategoryController {
     }
     @PatchMapping(path = "/{id}")
     public ResponseEntity<Object> saveProductCategory(@PathVariable Long id, @RequestBody ProductCategory productCategory){
-        log.info("GET /category/{id} called");
+        log.info("PATCH /products/categories/{} called with body: {}", id, productCategory);
         Response response = new Response();
         productCategory = productCategoryService.saveProductCategory(id, productCategory);
         response.setData(productCategory);
@@ -52,7 +52,7 @@ public class ProductCategoryController {
     }
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteProductCategoryById(@PathVariable Long id){
-        log.info("GET /category/{id} called");
+        log.info("DELETE /products/categories/{} called", id);
         Response response = new Response();
         productCategoryService.deleteProductCategoryById(id);
         response.setHttpCode(204);

@@ -1,5 +1,5 @@
 package com.example.productservice.infrastructure.data.jpa.product;
-import com.example.productservice.infrastructure.data.jpa.productCategory.ProductCategoryEntity;
+import com.example.productservice.infrastructure.data.jpa.category.ProductCategoryEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

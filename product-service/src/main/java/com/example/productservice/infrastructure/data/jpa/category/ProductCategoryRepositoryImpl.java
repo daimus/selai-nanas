@@ -1,9 +1,7 @@
-package com.example.productservice.infrastructure.data.jpa.productCategory;
+package com.example.productservice.infrastructure.data.jpa.category;
 
-import com.example.productservice.application.products.entity.Product;
-import com.example.productservice.application.products.entity.ProductCategory;
-import com.example.productservice.application.products.repository.ProductCategoryRepository;
-import com.example.productservice.infrastructure.data.jpa.product.ProductEntity;
+import com.example.productservice.application.categories.entity.ProductCategory;
+import com.example.productservice.application.categories.repository.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -67,6 +65,7 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
 
     @Override
     public boolean deleteById(Long id) {
+        this.findById(id);
         jpaProductCategoryRepository.deleteById(id);
         return true;
     }

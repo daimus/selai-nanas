@@ -63,7 +63,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> findAll() {
-        List<ProductEntity> productEntities = (List<ProductEntity>) jpaProductRepository.findAll();
+        List<ProductEntity> productEntities = jpaProductRepository.findAll();
         List<Product> products = new ArrayList<>();
         for (ProductEntity productEntity: productEntities){
             Product product = new Product();
@@ -78,11 +78,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Cacheable(key = "#id" ,value = "ProductCache")
     public Product findById(Long id) {
         Optional<ProductEntity> productEntity = jpaProductRepository.findById(id);
+        if (productEntity.isEmpty()){
+            throw new NoSuchElementException();
+        }
         return this.castProductEntity(productEntity);
     }
 
     @Override
-    @CachePut(key = "#id" ,value = "ProductCache")
+    @CachePut(key = "#product.id" ,value = "ProductCache")
     public Product save(Product product) {
         ProductEntity productEntities = new ProductEntity();
         BeanUtils.copyProperties(product, productEntities);
@@ -94,6 +97,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     @CachePut(key = "#id" ,value = "ProductCache")
     public boolean deleteById(Long id) {
+        this.findById(id);
         jpaProductRepository.deleteById(id);
         return true;
     }

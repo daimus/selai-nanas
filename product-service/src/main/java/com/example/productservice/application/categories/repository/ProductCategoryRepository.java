@@ -1,7 +1,6 @@
-package com.example.productservice.application.products.repository;
+package com.example.productservice.application.categories.repository;
 
-import com.example.productservice.application.products.entity.Product;
-import com.example.productservice.application.products.entity.ProductCategory;
+import com.example.productservice.application.categories.entity.ProductCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

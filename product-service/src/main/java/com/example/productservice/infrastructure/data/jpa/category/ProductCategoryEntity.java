@@ -1,6 +1,5 @@
-package com.example.productservice.infrastructure.data.jpa.productCategory;
+package com.example.productservice.infrastructure.data.jpa.category;
 
-import com.example.productservice.application.products.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +9,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

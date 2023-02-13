@@ -1,12 +1,11 @@
-package com.example.productservice.application.products.service;
+package com.example.productservice.application.categories.service;
 
-import com.example.productservice.application.products.entity.ProductCategory;
-import com.example.productservice.application.products.repository.ProductCategoryRepository;
-import com.example.productservice.application.products.usecase.ProductCategoryUseCase;
+import com.example.productservice.application.categories.entity.ProductCategory;
+import com.example.productservice.application.categories.repository.ProductCategoryRepository;
+import com.example.productservice.application.categories.usecase.ProductCategoryUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +38,7 @@ public class ProductCategoryService implements ProductCategoryUseCase {
 
     @Override
     public ProductCategory saveProductCategory(Long id, @Valid ProductCategory productCategory) {
+        this.getProductCategoryById(id);
         productCategory.setId(id);
         return productCategoryRepository.save(productCategory);
     }

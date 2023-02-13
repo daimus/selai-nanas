@@ -1,6 +1,5 @@
 package com.example.productservice.application.products.entity;
 
-import com.example.productservice.infrastructure.data.jpa.productCategory.ProductCategoryEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
