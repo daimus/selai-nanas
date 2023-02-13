@@ -1,14 +1,11 @@
-package com.example.productservice.application.products.entity;
+package com.example.productservice.application.categories.entity;
 
-import com.example.productservice.infrastructure.data.jpa.productCategory.ProductCategoryEntity;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

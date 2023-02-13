@@ -1,17 +1,14 @@
 package com.example.productservice.application.products.service;
+import com.example.productservice.application.products.entity.Product;
 import com.example.productservice.application.products.repository.ProductRepository;
 import com.example.productservice.application.products.usecase.ProductUseCase;
-import com.example.productservice.application.products.entity.Product;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +53,7 @@ public class ProductService implements ProductUseCase {
 
     @Override
     public Product saveProduct(Long id, @Valid Product product) {
+        this.getProductById(id);
         product.setId(id);
         return productRepository.save(product);
     }

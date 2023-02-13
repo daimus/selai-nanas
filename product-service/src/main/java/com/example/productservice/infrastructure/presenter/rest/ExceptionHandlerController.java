@@ -22,7 +22,6 @@ public class ExceptionHandlerController {
     private HttpServletRequest request;
     private int httpCode = 500;
     private ResponseEntity<Object> formatResponse(){
-        this.exception.printStackTrace();
         Response response = new Response();
         response.setPath(this.request.getRequestURI());
         response.setHttpCode(this.httpCode);

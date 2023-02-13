@@ -1,7 +1,6 @@
 package com.example.productservice.infrastructure.presenter.rest.product;
 
 import com.example.productservice.application.products.entity.Product;
-import com.example.productservice.application.products.service.ProductService;
 import com.example.productservice.application.products.usecase.ProductUseCase;
 import com.example.productservice.infrastructure.presenter.rest.Response;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -30,7 +27,7 @@ public class ProductController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Long categoryId
     ){
-        log.info("GET /product/{id} called");
+        log.info("GET /products called");
         Response response = new Response();
         Pageable pageable;
         if (sort == null){
@@ -59,7 +56,7 @@ public class ProductController {
     }
     @GetMapping(path = "/{id}")
     public ResponseEntity<Object> getProductById(@PathVariable Long id){
-        log.info("GET /product/{id} called");
+        log.info("GET /products/{} called", id);
         Response response = new Response();
         Product product = productUseCase.getProductById(id);
         response.setData(product);
@@ -67,7 +64,7 @@ public class ProductController {
     }
     @PostMapping
     public ResponseEntity<Object> createProduct(@Valid @RequestBody Product product){
-        log.info("GET /product/{id} called");
+        log.info("POST /products called with body: {}", product);
         Response response = new Response();
         product = productUseCase.saveProduct(product);
         response.setData(product);
@@ -76,7 +73,7 @@ public class ProductController {
     }
     @PatchMapping(path = "/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable Long id, @RequestBody Product product){
-        log.info("GET /product/{id} called");
+        log.info("PATCH /product/{} called with body: {}", id, product);
         Response response = new Response();
         product = productUseCase.saveProduct(id, product);
         response.setData(product);
@@ -84,7 +81,7 @@ public class ProductController {
     }
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long id){
-        log.info("GET /product/{id} called");
+        log.info("DELETE /product/{} called", id);
         Response response = new Response();
         productUseCase.deleteProductById(id);
         response.setHttpCode(204);
