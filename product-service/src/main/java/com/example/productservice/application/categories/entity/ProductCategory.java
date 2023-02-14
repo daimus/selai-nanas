@@ -19,5 +19,6 @@ public class ProductCategory {
     private Date deleted_at;
 
 
-
+    public ProductCategory(Long categoryId, String testCategory) {
+    }
 }

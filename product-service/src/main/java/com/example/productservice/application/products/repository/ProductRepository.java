@@ -14,4 +14,6 @@ public interface ProductRepository {
     Product findById(Long id);
     Product save(Product product);
     boolean deleteById(Long id);
+
+    Object existsById(Long expectedId);
 }
