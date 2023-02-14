@@ -102,4 +102,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         return true;
     }
 
+    @Override
+    public Object existsById(Long expectedId) {
+        return null;
+    }
+
 }
