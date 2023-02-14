@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class User {
     private Long id;
     @NotEmpty(message = "Username is required")
