@@ -19,17 +19,28 @@ import java.util.Date;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "username", unique = true)
     private String username;
+    @Column(name = "password")
     private String password;
-    private String fullname;
+    @Column(name = "full_name")
+    private String fullName;
+    @Column(name = "email", unique = true)
     private String email;
+    @Column(name = "photo")
     private String photo;
+    @Column(name = "role")
     private String role;
+    @Column(name = "address")
     private String address;
     @CreatedDate
-    private Date created_at;
+    @Column(name = "created_at")
+    private Date createdAt;
     @LastModifiedDate
-    private Date updated_at;
-    private Date deleted_at;
+    @Column(name = "updated_at")
+    private Date updatedAt;
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 }
