@@ -29,8 +29,9 @@ public class Product {
     private String description;
     @NotEmpty(message = "Product image is required")
     private String images;
-    private Long category_id;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
+    @NotNull
+    private Long categoryId;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 }

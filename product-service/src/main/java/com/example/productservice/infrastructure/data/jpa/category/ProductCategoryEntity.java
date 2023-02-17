@@ -14,18 +14,23 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_category")
+@Table(name = "product_categories")
 @EntityListeners(AuditingEntityListener.class)
 public class ProductCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
     private String name;
     @CreatedDate
-    private Date created_at;
+    @Column(name = "created_at")
+    private Date createdAt;
     @LastModifiedDate
-    private Date updated_at;
-    private Date deleted_at;
+    @Column(name = "updated_at")
+    private Date updatedAt;
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 
     @ManyToOne
     private ProductCategoryEntity category;
