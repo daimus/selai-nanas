@@ -4,11 +4,14 @@ import com.example.productservice.application.products.repository.ProductReposit
 import com.example.productservice.application.products.usecase.ProductUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.productservice.application.shared.GetNullProperties.getNullPropertyNames;
 
 @Service
 @RequiredArgsConstructor
@@ -52,9 +55,9 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Product saveProduct(Long id, @Valid Product product) {
-        this.getProductById(id);
-        product.setId(id);
+    public Product saveProduct(Long id, @Valid Product productParam) {
+        Product product = this.getProductById(id);
+        BeanUtils.copyProperties(productParam, product, getNullPropertyNames(productParam));
         return productRepository.save(product);
     }
 

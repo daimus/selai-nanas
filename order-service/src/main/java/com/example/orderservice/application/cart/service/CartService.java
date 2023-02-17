@@ -30,10 +30,10 @@ public class CartService implements CartUseCase {
     }
 
     @Override
-    public Cart saveCart(Long id, @Valid Cart cart) {
-        Cart prevCart = this.getCartById(id);
-        prevCart.setQuantity(cart.getQuantity());
-        return cartRepository.save(prevCart);
+    public Cart saveCart(Long id, @Valid Cart cartParam) {
+        Cart cart = this.getCartById(id);
+        cart.setQuantity(cartParam.getQuantity());
+        return cartRepository.save(cart);
     }
 
     @Override
