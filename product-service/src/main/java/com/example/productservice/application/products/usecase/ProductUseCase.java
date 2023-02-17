@@ -15,4 +15,5 @@ public interface ProductUseCase {
     Product saveProduct(Product product);
     Product saveProduct(Long id, Product product);
     boolean deleteProductById(Long id);
+    List<Product> getProduct(List<Long> ids);
 }

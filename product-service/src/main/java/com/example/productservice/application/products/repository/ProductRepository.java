@@ -16,4 +16,5 @@ public interface ProductRepository {
     boolean deleteById(Long id);
 
     Object existsById(Long expectedId);
+    List<Product> findAll(List<Long> ids);
 }

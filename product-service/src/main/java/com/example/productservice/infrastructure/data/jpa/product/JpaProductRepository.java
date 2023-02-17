@@ -16,4 +16,5 @@ public interface JpaProductRepository extends JpaRepository<ProductEntity, Long>
     Page<ProductEntity> getProductBySearchQuery(String search, Pageable pageable);
     @Query(value = "SELECT * FROM product WHERE category_id = ?1", nativeQuery = true)
     Page<ProductEntity> getProductByCategory(Long categoryId, Pageable pageable);
+    List<ProductEntity> findAllByIdIn(List<Long> ids);
 }

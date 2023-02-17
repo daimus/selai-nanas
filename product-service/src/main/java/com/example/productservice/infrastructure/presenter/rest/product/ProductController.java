@@ -13,6 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -85,6 +88,20 @@ public class ProductController {
         Response response = new Response();
         productUseCase.deleteProductById(id);
         response.setHttpCode(204);
+        return response.getResponse();
+    }
+
+    @GetMapping(path = "/mass")
+    public ResponseEntity<Object> getProductsByIds(@RequestParam String ids){
+        log.info("GET /product/mass/{} called", ids);
+        Response response = new Response();
+        String[] split = ids.split(",");
+        List<Long> convertedIds = new ArrayList<>();
+        for (String s: split){
+            convertedIds.add(Long.valueOf(s));
+        }
+        List<Product> products = productUseCase.getProduct(convertedIds);
+        response.setData(products);
         return response.getResponse();
     }
 }

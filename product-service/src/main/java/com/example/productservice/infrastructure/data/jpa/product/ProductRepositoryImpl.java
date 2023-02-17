@@ -61,6 +61,16 @@ public class ProductRepositoryImpl implements ProductRepository {
         return product;
     }
 
+    private List<Product> castProductEntity(List<ProductEntity> productEntities){
+        List<Product> products = new ArrayList<>();
+        for (ProductEntity productEntity: productEntities){
+            Product product = new Product();
+            BeanUtils.copyProperties(productEntity, product);
+            products.add(product);
+        }
+        return products;
+    }
+
     @Override
     public List<Product> findAll() {
         List<ProductEntity> productEntities = jpaProductRepository.findAll();
@@ -105,6 +115,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Object existsById(Long expectedId) {
         return null;
+    }
+    @Override
+    public List<Product> findAll(List<Long> ids) {
+        List<ProductEntity> productEntities = jpaProductRepository.findAllByIdIn(ids);
+        return this.castProductEntity(productEntities);
     }
 
 }
