@@ -63,4 +63,8 @@ public class ProductService implements ProductUseCase {
         productRepository.deleteById(id);
         return true;
     }
+    @Override
+    public List<Product> getProduct(List<Long> ids) {
+        return productRepository.findAll(ids);
+    }
 }
