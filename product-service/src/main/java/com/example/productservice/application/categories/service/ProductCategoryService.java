@@ -5,11 +5,14 @@ import com.example.productservice.application.categories.repository.ProductCateg
 import com.example.productservice.application.categories.usecase.ProductCategoryUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.productservice.application.shared.GetNullProperties.getNullPropertyNames;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +40,9 @@ public class ProductCategoryService implements ProductCategoryUseCase {
     }
 
     @Override
-    public ProductCategory saveProductCategory(Long id, @Valid ProductCategory productCategory) {
-        this.getProductCategoryById(id);
-        productCategory.setId(id);
+    public ProductCategory saveProductCategory(Long id, @Valid ProductCategory productCategoryParam) {
+        ProductCategory productCategory = this.getProductCategoryById(id);
+        BeanUtils.copyProperties(productCategoryParam, productCategory, getNullPropertyNames(productCategoryParam));
         return productCategoryRepository.save(productCategory);
     }
 
