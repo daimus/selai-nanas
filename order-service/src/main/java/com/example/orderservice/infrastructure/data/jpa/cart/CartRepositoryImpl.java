@@ -1,7 +1,8 @@
 package com.example.orderservice.infrastructure.data.jpa.cart;
 
-import com.example.orderservice.application.order.entity.Cart;
-import com.example.orderservice.application.order.repository.CartRepository;
+import com.example.orderservice.application.cart.entity.Cart;
+import com.example.orderservice.application.cart.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
@@ -18,14 +19,14 @@ public class CartRepositoryImpl implements CartRepository {
 
     @Override
     public List<Cart> findAll() {
-        List<CartEntity> cartEntities = (List<CartEntity>) jpaCartRepository.findAll();
-        List<Cart> carts = new ArrayList<>();
-        for (CartEntity cartEntity : cartEntities){
-            Cart cart = new Cart();
-            BeanUtils.copyProperties(cartEntity, cart);
-            carts.add(cart);
-        }
-        return carts;
+        List<CartEntity> cartEntities = jpaCartRepository.findAll();
+        return this.castCartEntityToCart(cartEntities);
+    }
+
+    @Override
+    public List<Cart> findAll(Long userId) {
+        List<CartEntity> cartEntities = jpaCartRepository.findAllByUserId(userId);
+        return this.castCartEntityToCart(cartEntities);
     }
 
     @Override
@@ -52,6 +53,22 @@ public class CartRepositoryImpl implements CartRepository {
     public boolean deleteById(Long id) {
         jpaCartRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    @Transactional
+    public void deleteCartsByUserId(Long userId) {
+        jpaCartRepository.deleteByUserId(userId);
+    }
+
+    private List<Cart> castCartEntityToCart(List<CartEntity> cartEntities){
+        List<Cart> carts = new ArrayList<>();
+        for (CartEntity cartEntity : cartEntities){
+            Cart cart = new Cart();
+            BeanUtils.copyProperties(cartEntity, cart);
+            carts.add(cart);
+        }
+        return carts;
     }
 
 }

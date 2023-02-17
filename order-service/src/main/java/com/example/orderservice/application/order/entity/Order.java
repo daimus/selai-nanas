@@ -1,4 +1,5 @@
 package com.example.orderservice.application.order.entity;
+import com.example.orderservice.application.order.type.OrderStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -12,21 +13,17 @@ import java.util.Date;
 @NoArgsConstructor
 public class Order {
     private Long id;
-    private Integer idProduct;
-    private Integer idUser;
-    @Enumerated(EnumType.STRING)
-    private Order_Status status;
+    private Long userId;
+    private OrderStatus status;
     private Integer total;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
+    private String paymentUrl;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 
-    public enum Order_Status {
-        UNPAID,
-        PAID,
-        CANCEL,
-        DONE,
+    public Order(Long userId, OrderStatus orderStatus){
+        this.userId = userId;
+        this.status = orderStatus;
     }
-
 }
 

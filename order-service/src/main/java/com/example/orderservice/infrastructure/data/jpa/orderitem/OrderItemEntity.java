@@ -1,4 +1,5 @@
-package com.example.orderservice.infrastructure.data.jpa.cart;
+package com.example.orderservice.infrastructure.data.jpa.orderitem;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,19 +14,21 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "carts")
+@Table(name = "order_items")
 @EntityListeners(AuditingEntityListener.class)
-public class CartEntity {
+public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "product_id")
     private Long productId;
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "order_id")
+    private Long orderId;
     @Column(name = "quantity")
     private Integer quantity;
+    @Column(name = "price")
+    private Integer price;
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
@@ -34,5 +37,4 @@ public class CartEntity {
     private Date updatedAt;
     @Column(name = "deleted_at")
     private Date deletedAt;
-
 }
