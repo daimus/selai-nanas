@@ -1,5 +1,6 @@
 package com.example.userservice.application.user.service;
 
+import com.example.userservice.application.shared.GetNullProperties;
 import com.example.userservice.application.user.dto.UserSafe;
 import com.example.userservice.application.user.entity.User;
 import com.example.userservice.application.user.repository.UserRepository;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.userservice.application.shared.GetNullProperties.getNullPropertyNames;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserUseCase {
@@ -48,14 +52,12 @@ public class UserService implements UserUseCase {
         return userRepository.save(user);
     }
     @Override
-    public User saveUser(Long id, @Valid User user) {
-        User prevUser = this.getUserById(id);
-        user.setId(id);
-        if (user.getPassword() == null){
-            user.setPassword(prevUser.getPassword());
-        } else {
-            user.setPassword(this.hashPassword(user.getPassword()));
+    public User saveUser(Long id, @Valid User userParam) {
+        User user = this.getUserById(id);
+        if (userParam.getPassword() != null){
+            userParam.setPassword(this.hashPassword(userParam.getPassword()));
         }
+        BeanUtils.copyProperties(userParam, user, getNullPropertyNames(userParam));
         return userRepository.save(user);
     }
 
