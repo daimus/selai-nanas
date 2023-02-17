@@ -29,9 +29,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors().and()
                 .csrf().disable()
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(new IpMatcher(SERVICE_IP)).permitAll()
                         .requestMatchers("/orders/payment/callback").permitAll()
