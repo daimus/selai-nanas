@@ -13,12 +13,12 @@ import java.util.Date;
 public class UserSafe {
     private Long id;
     private String username;
-    private String fullname;
+    private String fullName;
     private String email;
     private String photo;
     private String role;
     private String address;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 }

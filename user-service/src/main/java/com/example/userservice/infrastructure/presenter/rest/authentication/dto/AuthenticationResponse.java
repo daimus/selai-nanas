@@ -22,7 +22,7 @@ public class AuthenticationResponse {
         user.put("id", authenticatedUser.getId());
         user.put("username", authenticatedUser.getUsername());
         user.put("email", authenticatedUser.getEmail());
-        user.put("fullname", authenticatedUser.getFullname());
+        user.put("fullName", authenticatedUser.getFullName());
         user.put("role", authenticatedUser.getRole());
     }
 }

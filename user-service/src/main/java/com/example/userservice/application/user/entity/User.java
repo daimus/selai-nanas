@@ -1,5 +1,6 @@
 package com.example.userservice.application.user.entity;
 
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class User {
     private String username;
     private String password;
     @NotEmpty(message = "Fullname is required")
-    private String fullname;
+    private String fullName;
     @NotEmpty(message = "Email is required")
     @Email
     private String email;
@@ -26,7 +27,7 @@ public class User {
     private String role;
     @NotEmpty(message = "Address is required")
     private String address;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 }
