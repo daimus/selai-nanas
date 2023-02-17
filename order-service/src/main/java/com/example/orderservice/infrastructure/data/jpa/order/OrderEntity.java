@@ -1,10 +1,12 @@
 package com.example.orderservice.infrastructure.data.jpa.order;
+import com.example.orderservice.application.order.type.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -13,27 +15,28 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
+@EntityListeners(AuditingEntityListener.class)
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private Integer idProduct;
-    private Integer idUser;
-
+    @Column(name = "user_id")
+    private Long userId;
     @Enumerated(EnumType.STRING)
-    private Order_Status status;
+    @Column(name = "status")
+    private OrderStatus status;
+    @Column(name = "total")
     private Integer total;
+    @Column(name = "payment_url")
+    private String paymentUrl;
     @CreatedDate
-    private Date created_at;
+    @Column(name = "created_at")
+    private Date createdAt;
     @LastModifiedDate
-    private Date updated_at;
-    private Date deleted_at;
-
-    public enum Order_Status {
-        UNPAID,
-        PAID,
-        CANCEL,
-        DONE,
-    }
+    @Column(name = "updated_at")
+    private Date updatedAt;
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 
 }

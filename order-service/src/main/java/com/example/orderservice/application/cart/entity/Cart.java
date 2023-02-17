@@ -1,4 +1,4 @@
-package com.example.orderservice.application.order.entity;
+package com.example.orderservice.application.cart.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,16 +9,14 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Cart {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer idProduct;
-    private Integer idUser;
+    private Long productId;
+    private Long userId;
     private Integer quantity;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 
 }

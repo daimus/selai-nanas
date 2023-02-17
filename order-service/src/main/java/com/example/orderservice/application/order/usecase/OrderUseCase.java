@@ -1,12 +1,18 @@
 package com.example.orderservice.application.order.usecase;
 import com.example.orderservice.application.order.entity.Order;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Page;
 
+import java.awt.print.Pageable;
+import java.io.IOException;
 import java.util.List;
 
 public interface OrderUseCase {
-    List<Order> getOrder();
+    List<Order> getOrders();
+    Page<Order> getOrders(Pageable pageable);
     Order getOrderById(Long id);
-    Order saveOrder(Order Order);
-    Order saveOrder(Long id, Order Order);
+
+    Order createOrder(Long userId) throws IOException;
+    Order saveOrder(Order order);
     boolean deleteOrderById(Long id);
 }
