@@ -14,11 +14,7 @@ public class ProductCategory {
     private Long id;
     @NotEmpty(message = "Product category name is required")
     private String name;
-    private Date created_at;
-    private Date updated_at;
-    private Date deleted_at;
-
-
-    public ProductCategory(Long categoryId, String testCategory) {
-    }
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 }
