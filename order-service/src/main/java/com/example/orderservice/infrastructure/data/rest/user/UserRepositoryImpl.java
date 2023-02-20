@@ -31,9 +31,9 @@ public class UserRepositoryImpl implements UserRepository {
             sb.append(i);
             sb.append(",");
         }
-        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users?ids=" + sb, StandardCharsets.UTF_8);
-        log.info("uri : {}", uri);
-        String response = restTemplate.getForObject(uri, String.class);
+        // String uri = URLEncoder.encode(USER_SERVICE_HOST + "http://10.78.114.94:8080/users?ids=" + sb, StandardCharsets.UTF_8);
+        // log.info("uri : {}", uri);
+        String response = restTemplate.getForObject("http://10.78.114.94:8080/users?ids=" + sb, String.class);
         List<User> users = null;
         try {
             JSONObject json = new JSONObject(response);
@@ -51,9 +51,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUser(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users/" + id.toString(),  StandardCharsets.UTF_8);
-        log.info("uri : {}", uri);
-        String response = restTemplate.getForObject(uri, String.class);
+        // String uri = URLEncoder.encode(USER_SERVICE_HOST + "http://10.78.114.94:8080/users/" + id.toString(),  StandardCharsets.UTF_8);
+        // log.info("uri : {}", uri);
+        String response = restTemplate.getForObject("http://10.78.114.94:8080/users/" + id.toString(), String.class);
         User user = null;
         try {
             JSONObject json = new JSONObject(response);
