@@ -78,6 +78,7 @@ public class OrderService implements OrderUseCase {
         } catch (HttpClientErrorException httpClientErrorException){
             log.error("Failed to get users {}", httpClientErrorException.getStatusCode());
         } catch (Exception e){
+            e.printStackTrace();
             log.error("Something happen when get users {}", e.getMessage());
         }
         return orders;
@@ -93,6 +94,7 @@ public class OrderService implements OrderUseCase {
             log.error("Failed to get user with id {} : {}", order.getUserId(), httpClientErrorException.getStatusCode());
         }
         catch (Exception e){
+            e.printStackTrace();
             log.error("Something happen when get user with id {} : {}", order.getUserId(), e.getMessage());
         }
         return order;

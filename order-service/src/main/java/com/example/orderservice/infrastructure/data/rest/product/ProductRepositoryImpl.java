@@ -39,6 +39,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             ids.append(",");
         }
         String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids);
+        log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         List<Product> products = null;
         try {
@@ -58,6 +59,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Product getProduct(Long id) {
         RestTemplate restTemplate = new RestTemplate();
         String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString());
+        log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         Product product = null;
         try {

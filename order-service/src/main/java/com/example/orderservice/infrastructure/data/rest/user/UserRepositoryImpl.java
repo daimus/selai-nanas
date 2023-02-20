@@ -31,6 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
             sb.append(",");
         }
         String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users?ids=" + sb);
+        log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         List<User> users = null;
         try {
@@ -50,6 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUser(Long id) {
         RestTemplate restTemplate = new RestTemplate();
         String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users/" + id.toString());
+        log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         User user = null;
         try {
