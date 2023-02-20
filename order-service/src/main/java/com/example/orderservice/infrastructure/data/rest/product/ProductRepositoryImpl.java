@@ -41,7 +41,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             ids.append(",");
         }
         // String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids, StandardCharsets.UTF_8);
-        log.info("uri : {}", uri);
+        // log.info("uri : {}", uri);
         String response = restTemplate.getForObject("http://10.78.114.55:8081/products?ids=" + ids, String.class);
         List<Product> products = null;
         try {
@@ -62,7 +62,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         log.info("PRODUCT_SERVICE_HOST : {}", PRODUCT_SERVICE_HOST);
         RestTemplate restTemplate = new RestTemplate();
         // String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), StandardCharsets.UTF_8);
-        log.info("uri : {}", uri);
+        // log.info("uri : {}", uri);
         String response = restTemplate.getForObject("http://10.78.114.55:8081/products/" + id.toString(), String.class);
         Product product = null;
         try {
