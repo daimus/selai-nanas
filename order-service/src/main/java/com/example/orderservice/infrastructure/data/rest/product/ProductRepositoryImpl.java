@@ -33,6 +33,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     String PRODUCT_SERVICE_HOST;
     @Override
     public List<Product> getProducts(List<Long> id) {
+        log.info("PRODUCT_SERVICE_HOST : {}", PRODUCT_SERVICE_HOST);
         RestTemplate restTemplate = new RestTemplate();
         StringBuilder ids = new StringBuilder();
         for (Long i: id){
@@ -58,6 +59,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProduct(Long id) {
+        log.info("PRODUCT_SERVICE_HOST : {}", PRODUCT_SERVICE_HOST);
         RestTemplate restTemplate = new RestTemplate();
         String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), StandardCharsets.UTF_8);
         log.info("uri : {}", uri);
