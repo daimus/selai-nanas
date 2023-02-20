@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.URLEncoder;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,7 +38,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             ids.append(i);
             ids.append(",");
         }
-        String response = restTemplate.getForObject(PRODUCT_SERVICE_HOST + "/products?ids=" + ids, String.class);
+        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids);
+        String response = restTemplate.getForObject(uri, String.class);
         List<Product> products = null;
         try {
             JSONObject json = new JSONObject(response);
@@ -55,7 +57,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Product getProduct(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), String.class);
+        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString());
+        String response = restTemplate.getForObject(uri, String.class);
         Product product = null;
         try {
             JSONObject json = new JSONObject(response);

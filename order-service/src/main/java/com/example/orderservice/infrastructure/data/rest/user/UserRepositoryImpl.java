@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.net.URLEncoder;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +30,8 @@ public class UserRepositoryImpl implements UserRepository {
             sb.append(i);
             sb.append(",");
         }
-        String response = restTemplate.getForObject(USER_SERVICE_HOST + "/users?ids=" + sb, String.class);
+        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users?ids=" + sb);
+        String response = restTemplate.getForObject(uri, String.class);
         List<User> users = null;
         try {
             JSONObject json = new JSONObject(response);
@@ -47,7 +49,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUser(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(USER_SERVICE_HOST + "/users/" + id.toString(), String.class);
+        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users/" + id.toString());
+        String response = restTemplate.getForObject(uri, String.class);
         User user = null;
         try {
             JSONObject json = new JSONObject(response);
