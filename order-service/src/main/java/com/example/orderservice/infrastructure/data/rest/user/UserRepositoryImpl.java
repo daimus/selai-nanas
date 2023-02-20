@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
             sb.append(i);
             sb.append(",");
         }
-        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users?ids=" + sb);
+        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users?ids=" + sb, StandardCharsets.UTF_8);
         log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         List<User> users = null;
@@ -50,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUser(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users/" + id.toString());
+        String uri = URLEncoder.encode(USER_SERVICE_HOST + "/users/" + id.toString(),  StandardCharsets.UTF_8);
         log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         User user = null;

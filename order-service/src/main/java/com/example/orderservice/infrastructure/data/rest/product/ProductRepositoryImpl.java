@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             ids.append(i);
             ids.append(",");
         }
-        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids);
+        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids, StandardCharsets.UTF_8);
         log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         List<Product> products = null;
@@ -58,7 +59,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Product getProduct(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString());
+        String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), StandardCharsets.UTF_8);
         log.info("uri : {}", uri);
         String response = restTemplate.getForObject(uri, String.class);
         Product product = null;
