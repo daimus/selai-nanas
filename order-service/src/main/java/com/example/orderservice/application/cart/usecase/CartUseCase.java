@@ -1,6 +1,7 @@
 package com.example.orderservice.application.cart.usecase;
 import com.example.orderservice.application.cart.entity.Cart;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface CartUseCase {
@@ -10,6 +11,5 @@ public interface CartUseCase {
     Cart saveCart(Cart cart);
     Cart saveCart(Long id, Cart cart);
     boolean deleteCartById(Long id);
-
     void deleteCartByUserId(Long userId);
 }

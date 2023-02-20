@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,11 +22,11 @@ import java.util.List;
 public class CartController {
     private final CartUseCase cartUseCase;
     @GetMapping
-    public ResponseEntity<Object> getCarts(@RequestParam(required = false) Long userId){
+    public ResponseEntity<Object> getCarts(@RequestParam(required = false) Long userId) throws IOException {
         log.info("GET /cart called");
         Response response = new Response();
-        List<Cart> cart = userId == null ? cartUseCase.getCarts() : cartUseCase.getCarts(userId);
-        response.setData(cart);
+        List<Cart> carts = userId == null ? cartUseCase.getCarts() : cartUseCase.getCarts(userId);
+        response.setData(carts);
         return response.getResponse();
     }
     @GetMapping(path = "/{id}")
