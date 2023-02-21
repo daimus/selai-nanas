@@ -62,4 +62,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/file_service:latest
             docker stop file_service
             docker rm file_service
-            docker run -d --name file_service --env SPRING.JWT.TOKEN=${{ secrets.JWT_TOKEN }} --env AWS.ACCESS.KEY=${{ secrets.AWS_ACCESS_KEY }} --env AWS.SECRET.KEY=${{ secrets.AWS_SECRET_KEY }} --env AWS.S3.BUCKET=${{ secrets.AWS_S3_BUCKET }} --env SERVICE.IP=${{ secrets.SERVICE_IP }} --network=${{ secrets.DOCKER_NETWORK1 }} --ip=${{ secrets.DOCKER_NETWORK1_IP2 }} -p 8083:8080 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/file_service:latest
+            docker run -d --name file_service --env SPRING.JWT.TOKEN=${{ secrets.JWT_TOKEN }} --env AWS.ACCESS.KEY=${{ secrets.AWS_ACCESS_KEY }} --env AWS.SECRET.KEY=${{ secrets.AWS_SECRET_KEY }} --env AWS.S3.BUCKET=${{ secrets.AWS_S3_BUCKET }} --env SERVICE.IP=${{ secrets.SERVICE_IP }} -p 8083:8080 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/file_service:latest
