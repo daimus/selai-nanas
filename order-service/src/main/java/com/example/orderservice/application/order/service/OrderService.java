@@ -78,7 +78,6 @@ public class OrderService implements OrderUseCase {
         } catch (HttpClientErrorException httpClientErrorException){
             log.error("Failed to get users {}", httpClientErrorException.getStatusCode());
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Something happen when get users {}", e.getMessage());
         }
         return orders;
@@ -94,14 +93,13 @@ public class OrderService implements OrderUseCase {
             log.error("Failed to get user with id {} : {}", order.getUserId(), httpClientErrorException.getStatusCode());
         }
         catch (Exception e){
-            e.printStackTrace();
             log.error("Something happen when get user with id {} : {}", order.getUserId(), e.getMessage());
         }
         return order;
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Order createOrder(Long userId) throws IOException {
         List<Cart> carts = cartUseCase.getCarts(userId);
         if (carts.isEmpty()){
@@ -140,8 +138,8 @@ public class OrderService implements OrderUseCase {
         orderItemUseCase.saveAll(orderItems);
         order.setTotal(total);
         this.saveOrder(order);
-        orderEventPublisher.orderEvent(order);
         cartUseCase.deleteCartByUserId(userId);
+        orderEventPublisher.orderEvent(order);
         return order;
     }
 

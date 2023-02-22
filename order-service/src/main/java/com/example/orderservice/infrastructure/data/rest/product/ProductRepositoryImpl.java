@@ -22,8 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,16 +31,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     String PRODUCT_SERVICE_HOST;
     @Override
     public List<Product> getProducts(List<Long> id) {
-        // log.info("PRODUCT_SERVICE_HOST : {}", PRODUCT_SERVICE_HOST);
         RestTemplate restTemplate = new RestTemplate();
         StringBuilder ids = new StringBuilder();
         for (Long i: id){
             ids.append(i);
             ids.append(",");
         }
-        // String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products?ids=" + ids, StandardCharsets.UTF_8);
-        // log.info("uri : {}", uri);
-        String response = restTemplate.getForObject("http://10.78.114.55:8081/products?ids=" + ids, String.class);
+        String response = restTemplate.getForObject(PRODUCT_SERVICE_HOST + "/products?ids=" + ids, String.class);
         List<Product> products = null;
         try {
             JSONObject json = new JSONObject(response);
@@ -59,11 +54,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProduct(Long id) {
-        // log.info("PRODUCT_SERVICE_HOST : {}", PRODUCT_SERVICE_HOST);
         RestTemplate restTemplate = new RestTemplate();
-        // String uri = URLEncoder.encode(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), StandardCharsets.UTF_8);
-        // log.info("uri : {}", uri);
-        String response = restTemplate.getForObject("http://10.78.114.55:8081/products/" + id.toString(), String.class);
+        String response = restTemplate.getForObject(PRODUCT_SERVICE_HOST + "/products/" + id.toString(), String.class);
         Product product = null;
         try {
             JSONObject json = new JSONObject(response);

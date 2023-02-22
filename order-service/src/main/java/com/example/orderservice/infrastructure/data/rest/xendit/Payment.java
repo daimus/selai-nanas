@@ -7,6 +7,7 @@ import com.example.orderservice.event.publisher.OrderEventPublisher;
 import com.xendit.Xendit;
 import com.xendit.exception.XenditException;
 import com.xendit.model.Invoice;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class Payment {
 
     @Async
     @EventListener(condition = "@orderPredicate.orderUnpaid(#order.status)")
+//    @Transactional
     public void createInvoice(Order order) throws XenditException {
         log.info("order created listener on create invoice");
         Xendit.apiKey = XENDIT_API_KEY;

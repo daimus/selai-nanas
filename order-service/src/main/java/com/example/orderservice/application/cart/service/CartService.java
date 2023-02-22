@@ -54,7 +54,6 @@ public class CartService implements CartUseCase {
         } catch (HttpClientErrorException httpClientErrorException){
             log.error("Failed when get products {}", httpClientErrorException.getStatusCode());
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Something happen when get products {}", e.getMessage());
         }
         return carts;
@@ -88,7 +87,6 @@ public class CartService implements CartUseCase {
         } catch (HttpClientErrorException httpClientErrorException){
             log.error("Failed when get products {}", httpClientErrorException.getStatusCode());
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Something happen when get products {}", e.getMessage());
         }
         return cart;

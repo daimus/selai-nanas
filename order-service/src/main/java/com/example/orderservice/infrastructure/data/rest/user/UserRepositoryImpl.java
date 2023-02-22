@@ -14,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,9 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
             sb.append(i);
             sb.append(",");
         }
-        // String uri = URLEncoder.encode(USER_SERVICE_HOST + "http://10.78.114.94:8080/users?ids=" + sb, StandardCharsets.UTF_8);
-        // log.info("uri : {}", uri);
-        String response = restTemplate.getForObject("http://10.78.114.94:8080/users?ids=" + sb, String.class);
+        String response = restTemplate.getForObject(USER_SERVICE_HOST + "/users?ids=" + sb, String.class);
         List<User> users = null;
         try {
             JSONObject json = new JSONObject(response);
@@ -51,9 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUser(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        // String uri = URLEncoder.encode(USER_SERVICE_HOST + "http://10.78.114.94:8080/users/" + id.toString(),  StandardCharsets.UTF_8);
-        // log.info("uri : {}", uri);
-        String response = restTemplate.getForObject("http://10.78.114.94:8080/users/" + id.toString(), String.class);
+        String response = restTemplate.getForObject(USER_SERVICE_HOST + "/users/" + id.toString(), String.class);
         User user = null;
         try {
             JSONObject json = new JSONObject(response);
